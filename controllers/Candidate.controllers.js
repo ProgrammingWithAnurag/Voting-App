@@ -15,7 +15,7 @@ const checkAdminRole = async(userID) => {
 const addCandidate = async (req,res) => {
       try {
             if(! await checkAdminRole(req.user.id))
-                  return res.status(403).json({msg:"user has not admin role"})
+                  return res.status(403).json({success:false,msg:"user has not admin role"})
 
             const data = req.body
             
@@ -25,14 +25,14 @@ const addCandidate = async (req,res) => {
 
             res.status(200).json({success:true,response: response})
       } catch (error) {
-            res.status(500).json({msg: "Internal Server Error"})
+            res.status(500).json({success:false,msg: "Internal Server Error"})
       }
 }
 
 const updateCandidate = async(req,res) => {
       try {
             if(! await checkAdminRole(req.user.id))
-                return res.status(403).json({msg:"user has not admin role"})
+                return res.status(403).json({success:false,msg:"user has not admin role"})
 
             const candidateID = req.params.candidateID; //extract the id from the URL parameter
             const updatedCandidateData = req.body;
@@ -43,28 +43,28 @@ const updateCandidate = async(req,res) => {
             })
 
             if(!response){
-                  return res.status(404).json({msg: " Candidate not found"})
+                  return res.status(404).json({success:false,msg: " Candidate not found"})
             }
             res.status(200).json({response})
       } catch (error) {
-            res.status(500).json({msg: "Internal Server Error"})
+            res.status(500).json({success:false,msg: "Internal Server Error"})
       }
 }
 const deleteCandidate = async(req,res) => {
       try {
             if(! await checkAdminRole(req.user.id))
-                  return res.status(403).json({msg:"user does not have admin role"})
+                  return res.status(403).json({success:false,msg:"user does not have admin role"})
 
             const candidateID = req.params.candidateID; //extract the id from the URL parameter
 
             const response = await Candidate.findByIdAndDelete(candidateID)
 
             if(!response){
-                  return res.status(404).json({msg: "Candidate not found"})
+                  return res.status(404).json({success:false,msg: "Candidate not found"})
             }
             res.status(200).json({success:true,response})
       } catch (error) {
-            res.status(500).json({msg: "Internal Server Error"})
+            res.status(500).json({success:false,msg: "Internal Server Error"})
       }
 }
 
@@ -78,12 +78,12 @@ const voteToCandidate = async(req,res) => {
       try {
             const candidate = await Candidate.findById(candidateID)
             if(!candidate){
-                  return res.status(404).json({msg:"Candidate not found"})
+                  return res.status(404).json({success:false,msg:"Candidate not found"})
             }
 
             const user = await User.findById(userId)
             if(!user){
-                  return res.status(404).json({msg:"User not found"})
+                  return res.status(404).json({success:false,msg:"User not found"})
             }
 
             if(user.isVoted){
@@ -104,7 +104,7 @@ const voteToCandidate = async(req,res) => {
 
             res.status(200).json({success:true,msg: "Vote recorded successfully"})
       } catch (error) {
-            res.status(500).json({msg: "Internal Server Error"})
+            res.status(500).json({success:false,msg: "Internal Server Error"})
       }
 }
 
@@ -123,7 +123,7 @@ const voteCount = async(req,res) => {
 
             return res.status(200).json(voteRecord)
       } catch (error) {
-            res.status(500).json({msg: "Internal Server Error"})
+            res.status(500).json({success:false,msg: "Internal Server Error"})
       }
 }
 
