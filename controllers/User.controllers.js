@@ -19,7 +19,7 @@ const signupUser = async(req,res) => {
 
             res.status(200).json({success: true,response: response, token: token})
       } catch (error) {
-            res.status(500).json({msg: "Internal Server Error"})
+            res.status(500).json({success:false,msg: "Internal Server Error"})
       }
 }
 const loginUser = async(req,res) => {
